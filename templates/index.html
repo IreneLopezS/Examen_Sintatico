@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Analizador de CURP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e7d8f8;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            margin: 0;
+
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: #f5e1f8;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #f5e1f8;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 48%;
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            background-color: #5a63e4;
+            color: white;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #727af1;
+        }
+
+        button[type="button"] {
+            background-color: #dc7bfa;
+            color: white;
+        }
+
+        button[type="button"]:hover {
+            background-color: #df95f5;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            color: rgb(25, 25, 105);
+        }
+
+        .message.success {
+            background-color: #87e58a;
+        }
+
+        .message.error {
+            background-color: #fa867d;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #cfc2e7;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #ceb6df;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Analizador de CURP</h1>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message {{ 'success' if 'es válida' in message else 'error' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    
+        <form action="/" method="post">
+            <input type="text" name="curp" value="{{ curp }}" placeholder="Ingresa tu CURP" required>
+            <button type="submit">Analizar CURP</button>
+            <button type="button" onclick="limpiar()">Limpiar</button>
+        </form>
+    
+        {% if tokens %}
+        <div class="tokens">
+            <h3>Desglose de la CURP:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sección</th>
+                        <th>Valor</th>
+                        <th>Conteo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, value in tokens.items() %}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td>{{ value }}</td>
+                            <td>{{ contador_tokens[key] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+    
+    <script>
+        function limpiar() {
+            window.location.href = '/';
+        }
+    </script>
+    
+</body>
+</html>
